@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soppsjekk</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Soppsjekk 🍄</h1>
+        <p>Vel kjenneteikna til soppen for å få ei føreseiing.</p>
+
+        <form method="POST">
+
+{% set options = {
+    "stalk_root": [
+        ("b", "Bulbous"),
+        ("c", "Club"),
+        ("u", "Cup"),
+        ("e", "Equal"),
+        ("z", "Rhizomorphs"),
+        ("r", "Rooted"),
+        ("unknown", "Missing / unknown")
+    ],
+    "odor": [
+        ("a", "Almond"),
+        ("l", "Anise"),
+        ("c", "Creosote"),
+        ("y", "Fishy"),
+        ("f", "Foul"),
+        ("m", "Musty"),
+        ("n", "None"),
+        ("p", "Pungent"),
+        ("s", "Spicy")
+    ],
+    "bruises": [
+        ("t", "Bruises"),
+        ("f", "No bruises")
+    ],
+    "spore_print_color": [
+        ("k", "Black"),
+        ("n", "Brown"),
+        ("b", "Buff"),
+        ("h", "Chocolate"),
+        ("r", "Green"),
+        ("o", "Orange"),
+        ("u", "Purple"),
+        ("w", "White"),
+        ("y", "Yellow")
+    ],
+    "stalk_surface_below": [
+        ("f", "Fibrous"),
+        ("y", "Scaly"),
+        ("k", "Silky"),
+        ("s", "Smooth")
+    ],
+    "cap_surface": [
+        ("f", "Fibrous"),
+        ("g", "Grooves"),
+        ("y", "Scaly"),
+        ("s", "Smooth")
+    ],
+    "cap_shape": [
+        ("b", "Bell"),
+        ("c", "Conical"),
+        ("x", "Convex"),
+        ("f", "Flat"),
+        ("k", "Knobbed"),
+        ("s", "Sunken")
+    ],
+    "ring_number": [
+        ("n", "None"),
+        ("o", "One"),
+        ("t", "Two")
+    ],
+    "gill_size": [
+        ("b", "Broad"),
+        ("n", "Narrow")
+    ]
+} %}
+
+
+            {% for feature in features %}
+                <label for="{{ feature }}">
+                    {{ feature.replace("_", " ") | title }}
+                </label>
+
+                <select id="{{ feature }}" name="{{ feature }}" required>
+                    <option value="">Vel eit alternativ</option>
+                    {% for option in options[feature] %}
+                        <option value="{{ option }}">
+                            {{ option }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endfor %}
+
+            <button type="submit">Sjekk kjenneteikna</button>
+        </form>
+
+        {% if prediction %}
+            <section class="result">
+                <h2>Resultat frå modellen</h2>
+                <p>{{ prediction }}</p>
+            </section>
+        {% endif %}
+
+        <p class="warning">
+            Åtvaring: Dette er eit skuleprosjekt. Ikkje bruk resultatet
+            til å avgjere om sopp frå naturen er trygg å ete.
+        </p>
+    </main>
+</body>
+</html>
